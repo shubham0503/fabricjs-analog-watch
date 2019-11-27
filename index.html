@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Watch - Empty Cup Task2</title>
+</head>
+
+<body>
+    <canvas width="1890" height="970" id="c"></canvas>
+    <script src="fabric.min.js"></script>
+    <script>
+        var canvas, clockWidth, centerX, centerY, ctx, seconds, minutes, hours;
+
+        function setupAnalogClock(cw) {
+            canvas = new fabric.Canvas('c');
+
+            clockWidth = cw;
+            centerX = 750;
+            centerY = 290;
+
+            makeCircle();
+            hours = new fabric.Line([1050, 480, 940, 500], {
+                stroke: '#fff',
+                strokeWidth: 4
+            });
+
+            minutes = new fabric.Line([1080, 480, 947, 500], {
+                stroke: '#fff',
+                strokeWidth: 4
+            });
+
+            seconds = new fabric.Line([1090, 480, 940, 500], {
+                stroke: 'red',
+                strokeWidth: 1
+            });
+
+            tick();
+            window.setInterval(tick, 1000);
+        }
+
+        function makeCircle() {
+            var circle = new fabric.Circle({
+                radius: clockWidth/2,
+                fill: '#2D2C2D',
+                left: centerX,
+                top: centerY,
+                selectable: false,
+                stroke: '#6D6C6D',
+                strokeWidth: 20
+            });
+            canvas.add(circle);
+        }
+
+        function tick() {
+            var date = new Date();
+
+            var hours = date.getHours();
+            drawHand('hours', hours*30);
+            
+            var minutes = date.getMinutes();
+            drawHand('minutes', minutes*6);
+
+            var seconds = date.getSeconds();
+            drawHand('seconds', seconds*6);
+        }
+
+        function drawHand(handType, angle){
+            switch(handType) {
+                case 'hours':
+                    hours.set('angle', angle).set('flipY', true);
+                    canvas.add(hours);
+                case 'minutes':
+                    minutes.set('angle', angle).set('flipY', true);
+                    canvas.add(minutes);
+                case 'seconds':
+                    seconds.set('angle', angle).set('flipY', true);
+                    canvas.add(seconds);
+            }
+        }
+
+        window.onload = function() {
+            setupAnalogClock(360);
+        };
+    </script>
+</body>
+
+</html>
